@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require ('bcrypt')
 const {
     user_game,
-    user_game_biodata
+    user_game_biodata,
+    user_game_history
 } = require('../models')
 
 // --------------------------------GAME CONTENT------------------------------------//
@@ -170,7 +171,7 @@ const Game = async (req, res) => {
 // --------------------------------DASHBOARD------------------------------------//
 
 
-const Dashboard = async (req, res) => {
+const Dashboard = async (req, res, next) => {
     try {
     const token = req.cookies.jwt
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
@@ -188,7 +189,75 @@ const Dashboard = async (req, res) => {
     })
     } catch (error) {
         console.log(error)
+        next()
     }  
+}
+
+const DashboardBiodata = async (req, res, next) => {
+    try {
+        const token = req.cookies.jwt
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            res.locals.user = decodedToken
+        })
+    
+        const userBiodata = await user_game_biodata.findAll({
+            include: 'user_game'
+        })
+    
+        res.render('dashboard-biodata',{
+            pageTitle: "USERS BIODATA",
+            token,
+            data : userBiodata
+        })
+        } catch (error) {
+            console.log(error)
+            next()
+        } 
+}
+
+const DashboardHistory = async (req, res, next) => {
+    try {
+        const token = req.cookies.jwt
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            res.locals.user = decodedToken
+        })
+    
+        const userHistory = await user_game_history.findAll({
+            include: 'user_game'
+        })
+    
+        res.render('dashboard-history',{
+            pageTitle: "USERS HISTORY",
+            token,
+            data : userHistory
+        })
+        } catch (error) {
+            console.log(error)
+            next()
+        } 
+}
+
+const DashboardEdit = async (req, res, next) => {
+    try {
+        const findUser = await user_game.findOne({
+            where: {
+                uuid: req.params.id
+            },
+            include: ['user_biodata', 'user_history']
+        })
+
+        if(findUser){
+            res.render('dashboard-edit', {
+                data: findUser,
+                pageTitle: "Edit User Data"
+            })
+        }else{
+            next()
+        }        
+    } catch (error) {
+        console.log(error)
+        next()
+    }
 }
 
 module.exports = {
@@ -200,5 +269,8 @@ module.exports = {
     EditBiodata,
     EditBiodataFunction,
     EditAccount,
-    EditAccountFunction
+    EditAccountFunction,
+    DashboardEdit,
+    DashboardBiodata,
+    DashboardHistory
 }

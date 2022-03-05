@@ -12,7 +12,10 @@ const{
     EditBiodata,
     EditBiodataFunction,
     EditAccount,
-    EditAccountFunction
+    EditAccountFunction,
+    DashboardEdit,
+    DashboardBiodata,
+    DashboardHistory
 } = require('../controller/mvc')
 
 const {
@@ -29,6 +32,9 @@ router.get('/game', isLoggedIn, Game)
 router.get('/editAccount/:id',isLoggedIn, EditAccount)
 router.get('/editBiodata/:id', isLoggedIn, EditBiodata)
 router.get('/dashboard', isLoggedInAsAdmin,  Dashboard)
+router.get('/dashboard/biodata', DashboardBiodata)
+router.get('/dashboard/history', DashboardHistory)
+router.get('/dashboard/edit/:id', DashboardEdit)
 router.post('/signup', RegisterFunction)
 router.post('/login', LoginFunction)
 router.post('/logout', isLoggedIn, LogoutFunction)

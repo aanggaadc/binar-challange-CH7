@@ -33,12 +33,7 @@
                             <a href="/dashboard/history" class="nav-link align-middle px-0">
                                 <img src="/Assets/icon/history.png" alt="" style="width: 28px;"><span class="ms-1 d-none d-sm-inline">User History</span>
                             </a>
-                        </li> 
-                        <div class="d-flex align-items-end flex-column mt-3">
-                            <button type="button" class="btn btn-warning" style="width: 150px;">
-                              <a style="color: black;" href="/game">PLAY GAME</a>
-                            </button>
-                          </div>                           
+                        </li>                          
                     </ul>
                 </div>
                 
@@ -50,7 +45,7 @@
                       <thead>
                         <tr>
                         <th>Username</th>
-                          <th>Name</th>
+                          <th>Full Name</th>
                           <th>Address</th>
                           <th>City</th>
                           <th>Hobby</th>
@@ -61,7 +56,7 @@
                         <% data.forEach(item => { %>
                             <tr>
                             <td><%= item.user_game.username %> </td>
-                              <td><%= item.name %> </td>
+                              <td><%= item.full_name %> </td>
                               <td><%= item.address %> </td>
                               <td><%= item.city %> </td>
                               <td><%= item.hobby %> </td>
