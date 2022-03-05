@@ -260,6 +260,100 @@ const DashboardEdit = async (req, res, next) => {
     }
 }
 
+const DashboardEditFunction = async (req, res, next) => {
+    const {username, email, full_name, hobby, address, city, date_of_birth, win, lose, draw} = req.body
+    try {      
+      const findUserGame = await user_game.findOne({
+          where: {
+              uuid : req.params.id
+          }
+      })
+      if (findUserGame) {      
+          const findUserBiodata = await user_game_biodata.findOne({
+              where: {
+                user_game_uuid: req.params.id
+              }
+          })
+
+          const updateUserBiodata = await findUserBiodata.update({
+              full_name,
+              hobby,
+              address,
+              city,
+              date_of_birth
+          })
+
+          const findUserHistory = await user_game_history.findOne({
+              where: {
+                  user_game_uuid: req.params.id
+              }
+          })
+
+          const updateUserHistory = await findUserHistory.update({
+              win,
+              lose,
+              draw
+          })
+
+        const updateUser = await findUserGame.update({
+          username,
+          email
+        })
+       
+        if(updateUser){
+            req.flash('success', 'Data Successfully Updated')
+            res.redirect('/dashboard')
+        }
+      } else {
+        req.flash('error', 'User Not Found')
+        res.redirect('/dashboard')
+      }
+    } catch (error) {
+        req.flash('error', error.message)
+        console.log(error)
+        res.redirect('/')
+    }  
+}
+
+DashboardDeleteFunction = async (req, res, next) => {
+    try {  
+        const findUserGame = await user_game.findOne({
+            where: {
+                uuid : req.params.id
+            }
+        })
+        if (findUserGame) {
+          await user_game_history.destroy({
+              where: {
+                user_game_uuid: req.params.id
+              }
+            })
+  
+          await user_game_biodata.destroy({
+              where: {
+                user_game_uuid: req.params.id
+              }
+            })
+  
+          await user_game.destroy({
+            where: {
+              uuid: req.params.id
+            }
+          })
+
+          req.flash('success', 'Data Successfully Deleted')
+          res.redirect('/dashboard') 
+        } else {
+            req.flash('error', 'User Not Found')
+            res.redirect('/dashboard')
+        }
+      } catch (error) {
+        req.flash('error', error.message)
+        console.log(error)
+        res.redirect('/dashboard')
+      }  
+}
+
 module.exports = {
     Index,
     SignUp,
@@ -272,5 +366,7 @@ module.exports = {
     EditAccountFunction,
     DashboardEdit,
     DashboardBiodata,
-    DashboardHistory
+    DashboardHistory,
+    DashboardEditFunction,
+    DashboardDeleteFunction
 }
