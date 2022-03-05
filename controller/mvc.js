@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const bcrypt = require ('bcrypt')
 const {
     user_game,
     user_game_biodata
@@ -53,7 +54,7 @@ const EditBiodata = async (req, res, next) => {
         if(findUser){
             res.render('editBiodata', {
                 data: findUser,
-                pageTitle: "Edit User Account",
+                pageTitle: "Edit User Biodata",
                 token
             })
         }else{
@@ -95,6 +96,71 @@ const EditBiodataFunction = async (req, res) => {
     }
 }
 
+const EditAccount = async (req, res, next) => {
+    try {
+        const token = req.cookies.jwt
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        res.locals.user = decodedToken
+        })
+
+        const findUser = await user_game.findOne({
+            where: {
+                uuid: req.params.id
+            }
+        })
+
+        if(findUser){
+            res.render('editAccount', {
+                data: findUser,
+                pageTitle: "Edit User Account",
+                token
+            })
+        }else{
+            next()
+        }
+    } catch (error) {
+        next()
+    }
+}
+
+const EditAccountFunction = async (req, res) => {
+    try {
+        const{uuid} = req.params.id
+        const {username, email, password1, password2} =req.body
+
+        if(password1 != password2){
+            req.flash('error', 'Password Yang Anda Masukkan Tidak Sama')
+            res.redirect(`/editAccout/${uuid}`)
+            return
+        }else{
+            const findUser = await user_game.findOne({
+                where: {
+                    uuid: req.params.id
+                }
+            })
+            const hashedPassoword = await bcrypt.hash(password1, 10)
+            const updateUser = await user_game.update({
+                username,
+                email,
+                role : findUser.role,
+                password: password1 == "" && password2 =="" ? findUser.password : hashedPassoword
+            }, {where:{
+                uuid: req.params.id
+            }})
+            
+            if(updateUser){
+                req.flash('success', 'User Registered Successfully')
+                res.redirect('/')
+            }
+        }      
+    } catch (error) {
+        req.flash('error', error.message)
+        console.log(error)
+        res.redirect('/')
+    }
+}
+
+
 const Game = async (req, res) => {
     res.render('game', {
         pageTitle: "PLAY GAME"
@@ -119,5 +185,7 @@ module.exports = {
     Game,
     Dashboard,
     EditBiodata,
-    EditBiodataFunction
+    EditBiodataFunction,
+    EditAccount,
+    EditAccountFunction
 }

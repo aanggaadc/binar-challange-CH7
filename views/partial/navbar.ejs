@@ -58,7 +58,7 @@
                   Hi <%= user.username %>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Edit Account</a></li>
+                  <li><a class="dropdown-item" href="/editAccount/<%= user.user_id %>">Edit Account</a></li>
                   <li><a class="dropdown-item" href="/editBiodata/<%= user.user_id %>">Edit Biodata</a></li>                  
                 </ul>
               </li>                      
