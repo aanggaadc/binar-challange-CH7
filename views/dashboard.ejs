@@ -5,7 +5,7 @@
 </head>
 <style>
     body{
-        background-image: url("/Assets/images/dashboard-background.png");
+        background-image: url("/assets/images/dashboard-background.png");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -45,13 +45,7 @@
             </div>
             <div class="col py-3" style="margin-top: 100px;">
                 <div class="container-fluid">
-                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>
-                    <% if (status) { %>
-                      <div class="alert alert-warning alert-dismissible show fade text-center" role="alert">
-                        <strong> <%= message %>  </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                  <% }%>              
+                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>             
                     <a href="/dashboard/new">
                         <button class="btn btn-primary mb-2 mt-2">Add New User</button>
                       </a>
@@ -71,39 +65,6 @@
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <tbody>
-                      <% data.forEach(item => { %>
-                        <tr>
-                          <td><%= item.uuid %> </td>
-                          <td><%= item.username %> </td>
-                          <td><%= item.email %> </td>
-                          <td><%= item.user_game_biodata.name %> </td>
-                          <td><%= item.user_game_biodata.address %> </td>
-                          <td><%= item.user_game_biodata.city %> </td>
-                          <td><%= item.user_game_biodata.hobby %> </td>
-                          <td><%= item.user_game_biodata.date_of_birth %> </td>
-                          <td><%= item.user_game_history.win %> </td>
-                          <td><%= item.user_game_history.lose%> </td>
-                          <td>
-                            <div class="row">
-                                <div class="col-6">
-                                  <a href="/dashboard/edit?id=<%= item.uuid %>">
-                                    <button class="btn btn-warning">
-                                      Edit
-                                    </button>
-                                  </a>
-                                </div>                  
-                                <div class="col-6">
-                                  <form action="/dashboard/delete?id=<%= item.uuid %>" method="POST">
-                                    <button class="btn btn-danger">
-                                      Delete
-                                    </button>
-                                  </form>
-                                </div>
-                             </div>   
-                          </td>
-                        </tr>
-                        <% }) %>
                       </tbody>
         </div>
     </div>

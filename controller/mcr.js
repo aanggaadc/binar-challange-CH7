@@ -74,10 +74,10 @@ const LoginFunction = async (req, res) => {
             }, 
             process.env.JWT_SECRET,
             {
-                expiresIn: 86400 //24 jam
+                expiresIn: 1000*60*60*24
             }
             )
-            res.cookie('jwt', token, {maxAge: 86400})
+            res.cookie('jwt', token, {maxAge: 1000*60*60*24})
             res.redirect('/')
         }       
     } catch (error) {
