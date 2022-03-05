@@ -1,5 +1,8 @@
 const router = require('express').Router()
-const isLoggedIn = require('../middleware/authentication')
+const {
+    isLoggedIn,
+    isLoggedInAsAdmin
+} = require('../middleware/authentication')
 const{
     Index,
     SignUp,
@@ -23,14 +26,14 @@ router.get('/', Index)
 router.get('/signup', SignUp)
 router.get('/login', Login)
 router.get('/game', isLoggedIn, Game)
-router.get('/editAccount/:id', EditAccount)
-router.get('/editBiodata/:id', EditBiodata)
-router.get('/dashboard', Dashboard)
+router.get('/editAccount/:id',isLoggedIn, EditAccount)
+router.get('/editBiodata/:id', isLoggedIn, EditBiodata)
+router.get('/dashboard', isLoggedInAsAdmin,  Dashboard)
 router.post('/signup', RegisterFunction)
 router.post('/login', LoginFunction)
-router.post('/logout', LogoutFunction)
-router.post('/editBiodata/:id', EditBiodataFunction)
-router.post('/editAccount/:id', EditAccountFunction)
+router.post('/logout', isLoggedIn, LogoutFunction)
+router.post('/editBiodata/:id', isLoggedIn, EditBiodataFunction)
+router.post('/editAccount/:id', isLoggedIn, EditAccountFunction)
 
 
 
