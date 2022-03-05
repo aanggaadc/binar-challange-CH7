@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const isLoggedIn = require('../middleware/authentication')
 const{
     Index,
     SignUp,
@@ -16,10 +17,11 @@ const {
 router.get('/', Index)
 router.get('/signup', SignUp)
 router.get('/login', Login)
-router.get('/game', Game)
+router.get('/game', isLoggedIn, Game)
 router.post('/signup', RegisterFunction)
 router.post('/login', LoginFunction)
 router.post('/logout', LogoutFunction)
+
 
 
 module.exports = router
