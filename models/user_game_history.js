@@ -5,7 +5,10 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class user_game_history extends Model {
       static associate(models) {
-      // define association here
+      user_game_history.belongsTo(models.user_game, {
+        foreignKey: 'user_game_uuid',
+        as: 'user_game'
+      })
     }
   }
   user_game_history.init({
@@ -19,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     lose: {
+      defaultValue: 0,
+      type: DataTypes.INTEGER
+    },
+    draw: {
       defaultValue: 0,
       type: DataTypes.INTEGER
     },

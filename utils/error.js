@@ -1,0 +1,8 @@
+const errorHandler = (statusCode, errorMessage, res) => {
+    res.status(statusCode).json({
+        message: errorMessage,
+        status: "ERROR"
+    })
+}
+
+module.exports = errorHandler

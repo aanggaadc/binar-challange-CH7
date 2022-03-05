@@ -16,22 +16,43 @@
                 <div class="col-4"></div>
                 <div class="col-4"></div>                     
                 <div class="col-4">
-                    <div class="signup-form">
+                    <% if (success) { %>
+                        <%- include('partial/successMessage',{message: success[0]})  %>  
+                     <% } else if (error) { %>
+                        <%- include('partial/errorMessage',{message: error[0]}) %>
+                    <% } %>
+                    <div class="signup-form">                        
                         <form action="/signup" method="post">
                             <h2>Sign Up</h2>
                             <p>It's free and only takes a minute.</p>
                             <hr>
                             <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" class="form-control" name="full_name" required>
+                            </div>
+                            <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" name="nama" required="required">
+                                <input type="text" class="form-control" name="username" required>
                             </div>
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input type="email" class="form-control" name="email" required="required">
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>User Role</label>
+                                <input list="role" class="form-control" name="role" required>
+                                <datalist id="role">
+                                    <option value="SuperAdmin">
+                                    <option value="PlayerUser">
+                                  </datalist>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" name="password" required="required">
+                                <input type="password" class="form-control" name="password1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" class="form-control" name="password2" required>
                             </div>
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-primary btn-block btn-lg">SIGN UP</button>
@@ -44,5 +65,7 @@
                 
             </div>
         </div>
+
+        <script src="/assets/js/alert.js"></script>    
 </body>
 </html>

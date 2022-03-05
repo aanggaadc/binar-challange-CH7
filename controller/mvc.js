@@ -1,20 +1,34 @@
+const jwt = require('jsonwebtoken')
 
 // --------------------------------GAME CONTENT------------------------------------//
 const Index = async (req, res) =>{
+    const token = req.cookies.jwt
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        res.locals.user = decodedToken
+    })
+
     res.render('index', {
-        pageTitle: "Landing Page"
+        pageTitle: "Landing Page",
+        token
     })
 }
 
-const SignUp = async (req, res) => {
+const SignUp = async (req, res) => { 
+    const{success, error} = req.flash()  
     res.render('signup', {
-        pageTitle : "Sign Up"
+        pageTitle : "Sign Up",
+        success: success,
+        error: error        
     })
 }
 
 const Login = async (req, res) => {
+    const{success, error} = req.flash()
     res.render('login', {
-        pageTitle: "LOGIN"
+        pageTitle: "LOGIN",
+        success: success,
+        error: error
     })
 }
 
