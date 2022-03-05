@@ -40,8 +40,13 @@
             </div>
             <div class="col py-3" style="margin-top: 100px;">
                 <div class="container-fluid">
-                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>             
-                    <a href="/dashboard/new">
+                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>
+                    <% if (success) { %>
+                        <%- include('partial/successMessage',{message: success[0]})  %>  
+                     <% } else if (error) { %>
+                        <%- include('partial/errorMessage',{message: error[0]}) %>
+                    <% } %>             
+                    <a href="/dashboard/create">
                         <button class="btn btn-primary mb-2 mt-2">Add New User</button>
                       </a>
                     <table class="table table-dark table-hover table-bordered">
@@ -99,8 +104,8 @@
                       
             </div>
     </div>
-    <script src="/Assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/Assets/js/jquery-3.6.0.min.js"></script>
-    <script src="/Assets/js/alert.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/alert.js"></script>
 </body>
 </html>

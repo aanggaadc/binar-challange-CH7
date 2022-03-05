@@ -8,6 +8,7 @@ const {
 
 // --------------------------------GAME CONTENT------------------------------------//
 const Index = async (req, res) =>{
+    const{success, error} = req.flash()  
     const token = req.cookies.jwt
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
@@ -16,7 +17,9 @@ const Index = async (req, res) =>{
 
     res.render('index', {
         pageTitle: "Landing Page",
-        token
+        token,
+        success: success,
+        error: error 
     })
 }
 
@@ -173,6 +176,7 @@ const Game = async (req, res) => {
 
 const Dashboard = async (req, res, next) => {
     try {
+    const{success, error} = req.flash()  
     const token = req.cookies.jwt
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
         res.locals.user = decodedToken
@@ -185,7 +189,9 @@ const Dashboard = async (req, res, next) => {
     res.render('dashboard',{
         pageTitle: "GAME DASHBOARD",
         token,
-        data : userGameList
+        data : userGameList,
+        success: success,
+        error: error
     })
     } catch (error) {
         console.log(error)
@@ -237,6 +243,20 @@ const DashboardHistory = async (req, res, next) => {
         } 
 }
 
+DashboardCreate = async (req, res, next) => {
+    try {
+        const{success, error} = req.flash()  
+        res.render('dashboard-create', {
+            pageTitle : "Create New Data User",
+            success: success,
+            error: error
+        })
+    } catch (error) {
+        console.log(error)
+        next()
+    }
+}
+
 const DashboardEdit = async (req, res, next) => {
     try {
         const findUser = await user_game.findOne({
@@ -257,6 +277,46 @@ const DashboardEdit = async (req, res, next) => {
     } catch (error) {
         console.log(error)
         next()
+    }
+}
+
+const DashboardCreateFunction = async (req, res, next) => {
+    try {
+        const {full_name, username, email, password1, password2, role, city, date_of_birth, hobby, address} =req.body
+
+        if(password1 != password2){
+            req.flash('error', 'Password Yang Anda Masukkan Tidak Sama')
+            res.redirect('/dashboard/create')
+            return
+        }else{
+            const hashedPassword = await bcrypt.hash(password1, 10)
+            const newUser = await user_game.create({
+                username,
+                email,
+                role,
+                password: hashedPassword
+            })
+
+            await user_game_history.create({
+                user_game_uuid :newUser.uuid
+            })
+
+            await user_game_biodata.create({
+                full_name,
+                address,
+                hobby,
+                city,
+                date_of_birth,
+                user_game_uuid: newUser.uuid
+            })
+
+        }
+        req.flash('success', 'User Data Created Successfully')
+        res.redirect('/dashboard')
+    } catch (error) {
+        req.flash('error', error.message)
+        console.log(error)
+        res.redirect('/dashboard/create')
     }
 }
 
@@ -360,6 +420,8 @@ module.exports = {
     Login,
     Game,
     Dashboard,
+    DashboardCreate,
+    DashboardCreateFunction,
     EditBiodata,
     EditBiodataFunction,
     EditAccount,

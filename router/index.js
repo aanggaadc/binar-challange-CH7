@@ -9,6 +9,8 @@ const{
     Login,
     Game,
     Dashboard,
+    DashboardCreate,
+    DashboardCreateFunction,
     EditBiodata,
     EditBiodataFunction,
     EditAccount,
@@ -34,12 +36,14 @@ router.get('/game', isLoggedIn, Game)
 router.get('/editAccount/:id',isLoggedIn, EditAccount)
 router.get('/editBiodata/:id', isLoggedIn, EditBiodata)
 router.get('/dashboard', isLoggedInAsAdmin,  Dashboard)
+router.get('/dashboard/create', isLoggedInAsAdmin, DashboardCreate)
 router.get('/dashboard/biodata', isLoggedInAsAdmin, DashboardBiodata)
 router.get('/dashboard/history', isLoggedInAsAdmin, DashboardHistory)
 router.get('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEdit)
 router.post('/signup', RegisterFunction)
 router.post('/login', LoginFunction)
 router.post('/logout', isLoggedIn, LogoutFunction)
+router.post('/dashboard/create', isLoggedInAsAdmin, DashboardCreateFunction)
 router.post('/editBiodata/:id', isLoggedIn, EditBiodataFunction)
 router.post('/editAccount/:id', isLoggedIn, EditAccountFunction)
 router.post('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEditFunction)

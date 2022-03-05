@@ -16,6 +16,11 @@
     <main>
       <div id="main" class="hero_Section cover_Background">
         <div class="m-auto text-center">
+          <% if (success) { %>
+            <%- include('partial/successMessage',{message: success[0]})  %>  
+         <% } else if (error) { %>
+            <%- include('partial/errorMessage',{message: error[0]}) %>
+        <% } %>
           <div class="hero_Title">       
             <h1>PLAY TRADITIONAL GAME</h1>
           </div>

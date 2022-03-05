@@ -17,12 +17,12 @@ const RegisterFunction = async (req, res) => {
             res.redirect('/signup')
             return
         }else{
-            const hashedPassoword = await bcrypt.hash(password1, 10)
+            const hashedPassword = await bcrypt.hash(password1, 10)
             const newUser = await user_game.create({
                 username,
                 email,
                 role,
-                password: hashedPassoword
+                password: hashedPassword
             })
 
             await user_game_history.create({
