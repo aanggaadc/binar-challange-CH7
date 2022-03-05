@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partial/head') %> 
+</head>
+<style>
+    body{
+        background-image: url("/Assets/images/dashboard-background.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+</style>
+<body>
+    <%- include('partial/navbar') %>     
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu" style="margin-top: 75px;">                      
+                        <li class="nav-item">
+                            <a href="/dashboard" class="nav-link align-middle px-0">
+                                <img src="Assets/icon/user.png" alt="" style="width: 25px;"> <span class="ms-1 d-none d-sm-inline">User Dashboard</span>
+                            </a>
+                        </li>                       
+                        <li class="nav-item">
+                            <a href="/dashboard/biodata" class="nav-link align-middle px-0">
+                                <img src="Assets/icon/profile.png" alt="" style="width: 28px;"><span class="ms-1 d-none d-sm-inline">User Biodata</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/dashboard/history" class="nav-link align-middle px-0">
+                                <img src="Assets/icon/history.png" alt="" style="width: 28px;"><span class="ms-1 d-none d-sm-inline">User History</span>
+                            </a>
+                        </li> 
+                        <div class="d-flex align-items-end flex-column mt-3">
+                          <button type="button" class="btn btn-warning" style="width: 150px;">
+                            <a style="color: black;" href="/game">PLAY GAME</a>
+                          </button>
+                        </div>                       
+                    </ul>
+                    
+                </div>
+                
+            </div>
+            <div class="col py-3" style="margin-top: 100px;">
+                <div class="container-fluid">
+                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>
+                    <% if (status) { %>
+                      <div class="alert alert-warning alert-dismissible show fade text-center" role="alert">
+                        <strong> <%= message %>  </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                  <% }%>              
+                    <a href="/dashboard/new">
+                        <button class="btn btn-primary mb-2 mt-2">Add New User</button>
+                      </a>
+                    <table class="table table-dark table-hover table-bordered">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Username</th>
+                          <th>Email</th>
+                          <th>Name</th>
+                          <th>Address</th>
+                          <th>City</th>
+                          <th>Hobby</th>
+                          <th>Date of Birth</th>
+                          <th>Win</th>
+                          <th>Lose</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <% data.forEach(item => { %>
+                        <tr>
+                          <td><%= item.uuid %> </td>
+                          <td><%= item.username %> </td>
+                          <td><%= item.email %> </td>
+                          <td><%= item.user_game_biodata.name %> </td>
+                          <td><%= item.user_game_biodata.address %> </td>
+                          <td><%= item.user_game_biodata.city %> </td>
+                          <td><%= item.user_game_biodata.hobby %> </td>
+                          <td><%= item.user_game_biodata.date_of_birth %> </td>
+                          <td><%= item.user_game_history.win %> </td>
+                          <td><%= item.user_game_history.lose%> </td>
+                          <td>
+                            <div class="row">
+                                <div class="col-6">
+                                  <a href="/dashboard/edit?id=<%= item.uuid %>">
+                                    <button class="btn btn-warning">
+                                      Edit
+                                    </button>
+                                  </a>
+                                </div>                  
+                                <div class="col-6">
+                                  <form action="/dashboard/delete?id=<%= item.uuid %>" method="POST">
+                                    <button class="btn btn-danger">
+                                      Delete
+                                    </button>
+                                  </form>
+                                </div>
+                             </div>   
+                          </td>
+                        </tr>
+                        <% }) %>
+                      </tbody>
+        </div>
+    </div>
+    <script src="/Assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/Assets/js/jquery-3.6.0.min.js"></script>
+    <script src="/Assets/js/alert.js"></script>
+</body>
+</html>
