@@ -160,22 +160,35 @@ const EditAccountFunction = async (req, res) => {
     }
 }
 
-
 const Game = async (req, res) => {
     res.render('game', {
         pageTitle: "PLAY GAME"
     })
 }
 
-const Dashboard = async (req, res) =>{
+
+// --------------------------------DASHBOARD------------------------------------//
+
+
+const Dashboard = async (req, res) => {
+    try {
     const token = req.cookies.jwt
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
         res.locals.user = decodedToken
     })
+
+    const userGameList = await user_game.findAll({
+        include: ['user_biodata', 'user_history']
+    })
+
     res.render('dashboard',{
         pageTitle: "GAME DASHBOARD",
-        token
+        token,
+        data : userGameList
     })
+    } catch (error) {
+        console.log(error)
+    }  
 }
 
 module.exports = {

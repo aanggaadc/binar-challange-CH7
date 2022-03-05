@@ -62,11 +62,47 @@
                           <th>Date of Birth</th>
                           <th>Win</th>
                           <th>Lose</th>
+                          <th>Draw</th>
                           <th>Action</th>
                         </tr>
                       </thead>
+                      <tbody>
+                        <% data.forEach(item => { %>
+                            <tr>
+                              <td><%= item.uuid %> </td>
+                              <td><%= item.username %> </td>
+                              <td><%= item.email %> </td>
+                              <td><%= item.user_biodata.full_name %> </td>
+                              <td><%= item.user_biodata.address %> </td>
+                              <td><%= item.user_biodata.city %> </td>
+                              <td><%= item.user_biodata.hobby %> </td>
+                              <td><%= item.user_biodata.date_of_birth %> </td>
+                              <td><%= item.user_history.win %> </td>
+                              <td><%= item.user_history.lose%> </td>
+                              <td><%= item.user_history.draw%> </td>
+                              <td>
+                                <div class="row">
+                                    <div class="col-6">
+                                      <a href="/dashboard/edit/<%= item.uuid %>">
+                                        <button class="btn btn-warning">
+                                          Edit
+                                        </button>
+                                      </a>
+                                    </div>                  
+                                    <div class="col-6">
+                                      <form action="/dashboard/delete/<%= item.uuid %>" method="POST">
+                                        <button class="btn btn-danger">
+                                          Delete
+                                        </button>
+                                      </form>
+                                    </div>
+                                 </div>   
+                              </td>
+                            </tr>
+                            <% }) %>
                       </tbody>
-        </div>
+                      
+            </div>
     </div>
     <script src="/Assets/js/bootstrap.bundle.min.js"></script>
     <script src="/Assets/js/jquery-3.6.0.min.js"></script>
