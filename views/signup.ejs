@@ -7,6 +7,7 @@
     body{
         background-image: url("/Assets/images/sign-background.jpg");
         background-size: cover;
+        background-position: center;
         background-repeat: no-repeat;
     }
 </style>
@@ -39,12 +40,11 @@
                                 <input type="email" class="form-control" name="email" required>
                             </div>
                             <div class="form-group">
-                                <label>User Role</label>
-                                <input list="role" class="form-control" name="role" required>
-                                <datalist id="role">
-                                    <option value="SuperAdmin">
-                                    <option value="PlayerUser">
-                                  </datalist>
+                                <label>User Role</label><br>
+                                <select style="width: 340px; height: 45px;" id="user_role" name="role">
+                                    <option value="SuperAdmin">SuperAdmin</option>
+                                    <option value="PlayerUser">PlayerUser</option>
+                                  </select>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
