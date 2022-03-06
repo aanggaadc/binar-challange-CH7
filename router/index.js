@@ -3,11 +3,15 @@ const {
     isLoggedIn,
     isLoggedInAsAdmin
 } = require('../middleware/authentication')
+
 const{
     Index,
     SignUp,
     Login,
     Game,
+    SignupFunction,
+    LoginFunction,
+    LogoutFunction,
     Dashboard,
     DashboardCreate,
     DashboardCreateFunction,
@@ -23,12 +27,11 @@ const{
 } = require('../controller/mvc')
 
 const {
-    RegisterFunction,
-    LoginFunction,
-    LogoutFunction
+    RegisterMCR
 } = require('../controller/mcr')
 
 
+// ----------------------------------- MVC ROUTE-------------------------------------//
 router.get('/', Index)
 router.get('/signup', SignUp)
 router.get('/login', Login)
@@ -40,7 +43,7 @@ router.get('/dashboard/create', isLoggedInAsAdmin, DashboardCreate)
 router.get('/dashboard/biodata', isLoggedInAsAdmin, DashboardBiodata)
 router.get('/dashboard/history', isLoggedInAsAdmin, DashboardHistory)
 router.get('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEdit)
-router.post('/signup', RegisterFunction)
+router.post('/signup', SignupFunction)
 router.post('/login', LoginFunction)
 router.post('/logout', isLoggedIn, LogoutFunction)
 router.post('/dashboard/create', isLoggedInAsAdmin, DashboardCreateFunction)
@@ -48,6 +51,8 @@ router.post('/editBiodata/:id', isLoggedIn, EditBiodataFunction)
 router.post('/editAccount/:id', isLoggedIn, EditAccountFunction)
 router.post('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEditFunction)
 router.post('/dashboard/delete/:id', isLoggedInAsAdmin, DashboardDeleteFunction)
+
+// ----------------------------------- MCR ROUTE-------------------------------------//
 
 
 

@@ -1,5 +1,4 @@
 'use strict'
-const { user } = require('pg/lib/defaults');
 const {
   Model
 } = require('sequelize');

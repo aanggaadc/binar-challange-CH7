@@ -8,7 +8,7 @@ const {
 } = require('../models')
 
 
-const RegisterFunction = async (req, res) => {
+const RegisterMCR = async (req, res) => {
     try {
         const {full_name, username, email, password1, password2, role} =req.body
 
@@ -44,7 +44,7 @@ const RegisterFunction = async (req, res) => {
     }
 }
 
-const LoginFunction = async (req, res) => {
+const LoginMCR = async (req, res) => {
     try {
         const {email, password} = req.body
         if(!email){
@@ -85,18 +85,8 @@ const LoginFunction = async (req, res) => {
     }
 }
 
-const LogoutFunction = (req, res ) => {        
-    try {
-        res.cookie('jwt', '', {maxAge:1})
-        res.redirect('/')
-    } catch (error) {
-        console.log(error)
-    }
-        
-}
 
 module.exports = {
-    RegisterFunction,
-    LoginFunction,
-    LogoutFunction
+    RegisterMCR,
+    LoginMCR
 }
