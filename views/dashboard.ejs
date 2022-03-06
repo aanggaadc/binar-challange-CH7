@@ -40,12 +40,32 @@
             </div>
             <div class="col py-3" style="margin-top: 100px;">
                 <div class="container-fluid">
-                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>
-                    <% if (success) { %>
-                        <%- include('partial/successMessage',{message: success[0]})  %>  
-                     <% } else if (error) { %>
-                        <%- include('partial/errorMessage',{message: error[0]}) %>
-                    <% } %>             
+                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>                   
+                    
+                    <% if (data.length > 0) { %>
+                      <nav aria-label="Page navigation example">
+                          <ul class="pagination justify-content-center">
+                            <li class="page-item <%= currentPage ==1 ? 'disabled' : '' %> ">
+                              <a class="page-link" href="/?page=<%= prevPage %>">Previous</a>
+                            </li>                  
+                          <% for( let index = 1; index <= totalPage; index++ ) { %>
+                              <li class="page-item <%= index == currentPage ? 'active' : '' %> ">
+                                  <a class="page-link" href="/?page=<%= index %> "> <%= index %> </a>
+                              </li>
+                          <% } %>
+                            <li class="page-item <%= totalPage == currentPage ? 'disabled' : '' %>">
+                              <a class="page-link " href="/?page=<%= nextPage %>">Next</a>
+                            </li>
+                          </ul>
+                        </nav>
+                <% } %> 
+
+                  <% if (success) { %>
+                    <%- include('partial/successMessage',{message: success[0]})  %>  
+                <% } else if (error) { %>
+                    <%- include('partial/errorMessage',{message: error[0]}) %>
+                  <% } %>
+                    
                     <a href="/dashboard/create">
                         <button class="btn btn-primary mb-2 mt-2">Add New User</button>
                       </a>
@@ -100,10 +120,14 @@
                               </td>
                             </tr>
                             <% }) %>
-                      </tbody>
+                      </tbody> 
                       
-            </div>
+            </div>           
     </div>
+  </div>
+</div>
+    
+    
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/alert.js"></script>

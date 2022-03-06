@@ -263,20 +263,28 @@ const LogoutFunction = (req, res ) => {
 
 const Dashboard = async (req, res, next) => {
     try {
-    const{success, error} = req.flash()  
+    const{success, error} = req.flash()
+    const page = Number(req.query.page) || 1
+    const itemPerPage = 10  
     const token = req.cookies.jwt
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
         res.locals.user = decodedToken
     })
 
-    const userGameList = await user_game.findAll({
-        include: ['user_biodata', 'user_history']
+    const userGameList = await user_game.findAndCountAll({
+        include: ['user_biodata', 'user_history'],
+        limit: itemPerPage,
+        offset: (page-1) * itemPerPage
     })
 
     res.render('dashboard',{
         pageTitle: "GAME DASHBOARD",
         token,
-        data : userGameList,
+        data : userGameList.rows,
+        currentPage: page,
+        totalPage: Math.ceil(userGameList.count / itemPerPage),
+        nextPage: page + 1,
+        prevPage: (page-1) == 0 ? 1 : (page-1), 
         success: success,
         error: error
     })
