@@ -3,7 +3,7 @@ const {
     isLoggedIn,
     isLoggedInAsAdmin
 } = require('../middleware/authentication')
-
+const verifyToken = require('../middleware/verifyToken')
 const{
     Index,
     SignUp,
@@ -27,7 +27,10 @@ const{
 } = require('../controller/mvc')
 
 const {
-    RegisterMCR
+    RegisterAPI,
+    LoginAPI,
+    CreateRoom,
+    PlayGameRoom
 } = require('../controller/mcr')
 
 
@@ -53,7 +56,10 @@ router.post('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEditFunction)
 router.post('/dashboard/delete/:id', isLoggedInAsAdmin, DashboardDeleteFunction)
 
 // ----------------------------------- MCR ROUTE-------------------------------------//
-
+router.post('/api/register', RegisterAPI)
+router.post('/api/login', LoginAPI)
+router.post('/api/room/create', verifyToken, CreateRoom)
+router.post('/api/room/play',verifyToken, PlayGameRoom)
 
 
 module.exports = router

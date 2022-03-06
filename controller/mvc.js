@@ -92,6 +92,7 @@ const LoginFunction = async (req, res) => {
 
         if(!user){
             req.flash('error', 'Email Not Found')
+            res.redirect('/login')
         }
 
         let validPassword = bcrypt.compareSync(password, user.password)

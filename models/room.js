@@ -51,13 +51,13 @@ module.exports = (sequelize, DataTypes) => {
     player1_choices: {
       type: DataTypes.ARRAY(DataTypes.ENUM('ROCK', 'PAPER', 'SCISSOR'))
     },
-    palyer1_uuid: {
+    player1_uuid: {
       type : DataTypes.UUID
     },
     player2_choices: {
         type: DataTypes.ARRAY(DataTypes.ENUM('ROCK', 'PAPER', 'SCISSOR'))
       },
-      palyer2_uuid: {
+      player2_uuid: {
         type : DataTypes.UUID
       },
       winner_uuid: {
@@ -78,11 +78,11 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   room.beforeCreate((data) => {
-    data.name = data.nemae.toLowerCase()
+    data.room_name = data.room_name.toLowerCase()
   })
 
   room.beforeUpdate((data) => {
-    data.name = data.nemae.toLowerCase()
+    data.room_name = data.room_name.toLowerCase()
   })
   return room;
 };
