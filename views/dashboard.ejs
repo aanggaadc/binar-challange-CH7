@@ -42,7 +42,7 @@
                 <div class="container-fluid">
                     <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>                   
                     
-                    <% if (data.length > 0) { %>
+                    <% if (dataUser.length > 0) { %>
                       <nav aria-label="Page navigation example">
                           <ul class="pagination justify-content-center">
                             <li class="page-item <%= currentPage ==1 ? 'disabled' : '' %> ">
@@ -87,7 +87,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <% data.forEach(item => { %>
+                        <% dataUser.forEach(item => { %>
                             <tr>
                               <td><%= item.uuid %> </td>
                               <td><%= item.username %> </td>
@@ -120,8 +120,7 @@
                               </td>
                             </tr>
                             <% }) %>
-                      </tbody> 
-                      
+                      </tbody>                       
             </div>           
     </div>
   </div>

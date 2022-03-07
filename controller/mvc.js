@@ -17,12 +17,30 @@ const Index = async (req, res) =>{
         res.locals.user = decodedToken
     })
 
-    res.render('index', {
-        pageTitle: "Landing Page",
-        token,
-        success: success,
-        error: error 
-    })
+    if(token){
+        const findUser = await user_game.findOne({
+            where: {
+                uuid: res.locals.user.user_id
+                
+            },
+            include: "avatar"
+        })
+
+        res.render('index', {
+            pageTitle: "Landing Page",
+            token,
+            data: findUser,
+            success: success,
+            error: error 
+        }) 
+    }else{
+        res.render('index', {
+            pageTitle: "Landing Page",
+            token,
+            success: success,
+            error: error 
+        }) 
+    }     
 }
 
 const SignUp = async (req, res) => { 
@@ -303,17 +321,40 @@ const Dashboard = async (req, res, next) => {
         offset: (page-1) * itemPerPage
     })
 
-    res.render('dashboard',{
-        pageTitle: "GAME DASHBOARD",
-        token,
-        data : userGameList.rows,
-        currentPage: page,
-        totalPage: Math.ceil(userGameList.count / itemPerPage),
-        nextPage: page + 1,
-        prevPage: (page-1) == 0 ? 1 : (page-1), 
-        success: success,
-        error: error
-    })
+    if(token){
+        const findUser = await user_game.findOne({
+            where: {
+                uuid: res.locals.user.user_id
+                
+            },
+            include: "avatar"
+        })
+
+        res.render('dashboard',{
+            pageTitle: "GAME DASHBOARD",
+            token,
+            data: findUser,
+            dataUser : userGameList.rows,
+            currentPage: page,
+            totalPage: Math.ceil(userGameList.count / itemPerPage),
+            nextPage: page + 1,
+            prevPage: (page-1) == 0 ? 1 : (page-1), 
+            success: success,
+            error: error
+        })
+    }else {
+        res.render('dashboard',{
+            pageTitle: "GAME DASHBOARD",
+            token,
+            dataUser : userGameList.rows,
+            currentPage: page,
+            totalPage: Math.ceil(userGameList.count / itemPerPage),
+            nextPage: page + 1,
+            prevPage: (page-1) == 0 ? 1 : (page-1), 
+            success: success,
+            error: error
+        })
+    }    
     } catch (error) {
         console.log(error)
         next()
@@ -330,12 +371,29 @@ const DashboardBiodata = async (req, res, next) => {
         const userBiodata = await user_game_biodata.findAll({
             include: 'user_game'
         })
+        
+        if(token){
+            const findUser = await user_game.findOne({
+                where: {
+                    uuid: res.locals.user.user_id
+                    
+                },
+                include: "avatar"
+            })
     
-        res.render('dashboard-biodata',{
-            pageTitle: "USERS BIODATA",
-            token,
-            data : userBiodata
-        })
+            res.render('dashboard-biodata',{
+                pageTitle: "USERS BIODATA",
+                token,
+                data: findUser,
+                dataUser : userBiodata
+            }) 
+        }else{
+            res.render('dashboard-biodata',{
+                pageTitle: "USERS BIODATA",
+                token,
+                dataUser : userBiodata
+            })
+        }        
         } catch (error) {
             console.log(error)
             next()
@@ -352,12 +410,31 @@ const DashboardHistory = async (req, res, next) => {
         const userHistory = await user_game_history.findAll({
             include: 'user_game'
         })
+
+        if(token){
+            const findUser = await user_game.findOne({
+                where: {
+                    uuid: res.locals.user.user_id
+                    
+                },
+                include: "avatar"
+            })
     
-        res.render('dashboard-history',{
-            pageTitle: "USERS HISTORY",
-            token,
-            data : userHistory
-        })
+            res.render('dashboard-history',{
+                pageTitle: "USERS HISTORY",
+                token,
+                data: findUser,
+                dataUser : userHistory
+            })
+        
+        }else{
+            res.render('dashboard-history',{
+                pageTitle: "USERS HISTORY",
+                token,
+                dataUser : userHistory
+            })
+        }
+        
         } catch (error) {
             console.log(error)
             next()

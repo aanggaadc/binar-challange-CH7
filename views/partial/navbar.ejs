@@ -3,7 +3,15 @@
     <nav class="nav_text navbar navbar-expand-md navbar-dark">
       <div class="container-fluid">
         <div class="navbar-brand">
-          <span>LOGO</span>
+          <% if (token) { %>
+            <% if (data.avatar) { %>
+                <img class="rounded-circle" style="width: 70px; height: 70px;" src="<%= data.avatar.file_url %> " alt="">
+                <% } else { %>
+                 <img class="img-fluid" style="width: 60px; height: 60px;" src="/assets/images/user.png" alt="">
+            <% } %>            
+           <% } else { %>
+            <span>LOGO</span>
+          <% } %>          
         </div>
         <button
           class="navbar-toggler"
