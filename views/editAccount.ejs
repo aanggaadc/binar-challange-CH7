@@ -20,15 +20,29 @@
             <div class="col-3"></div>
             <div class="col-6">
                 <div class="edit-dark d-flex justify-content-center align-items-center">
-                    <form action="/editAccount/<%= data.uuid %>" method="POST">
+                    <form action="/editAccount/<%= data.uuid %>" method="POST" enctype="multipart/form-data">
                         <h2 class="text-center" style="font-size: 40px;">Edit Account</h1>
                         <h2 class="sr-only">Login Form</h2>
-                        <div class="mt-5 text-center"><img src="/assets/images/user.png" alt="user" style="width: 30%;"></div>
+                        <div class="mt-5 text-center">
+                            <% if (data.avatar) { %>
+                                <input class="rounded-circle" style="width: 130px; height: 130px;" type="image" src="<%= data.avatar.file_url %> " onClick="return false;"/>
+                                <input type="file" id="my_file" style="display: none;" name="avatar" accept="image/*" />
+                                <% } else { %>  
+                                    <input style="width: 110px; height: 110px;" type="image" src="/assets/images/user.png" onClick="return false;"/>
+                                    <input type="file" id="my_file" style="display: none;" name="avatar" accept="image/*" />                               
+                            <% } %>
+                            
+                            <!-- <img src="/assets/images/user.png" alt="user" style="width: 30%;"> -->
+                            <!-- <label for="image">
+                                <input type="file" name="avatar" id="image" accept="image/png,image/jpg,image/jpeg" style="display:none;"/>
+                                <img src="/assets/images/user.png" alt="user" style="width: 30%;">
+                             </label> -->
+                        </div>
                         <div  class="form-group mt-5"><input class="form-control text-center" type="text" name="username" value="<%= data.username %>" placeholder="Username"></div>
                         <div class="form-group mt-5"><input class="form-control text-center" type="email" name="email" value="<%= data.email %>" placeholder="Address"></div>
                         <div class="form-group mt-5"><input class="form-control text-center" type="password" name="password1" placeholder="password"></div>
                         <div class="form-group mt-5"><input class="form-control text-center" type="password" name="password2" placeholder="confirm password"></div>
-                        <div class="form-group mt-4"><button class="btn btn-primary btn-block">Submit</button></div>
+                        <div class="form-group mt-4"><button class="btn btn-primary btn-block" type="submit">Submit</button></div>
                 </div>
             </div>
             <div class="col-3"></div>
@@ -37,6 +51,12 @@
     </div>
     
 
-    <script src="/Assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script>
+        $("input[type='image']").click(function() {
+        $("input[id='my_file']").click();
+});
+    </script>
 </body>
 </html>

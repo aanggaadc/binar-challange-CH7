@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require ('bcrypt')
+const fs = require('fs')
 const {
     user_game,
     user_game_biodata,
-    user_game_history
+    user_game_history,
+    file
 } = require('../models')
 
 // --------------------------------GAME CONTENT------------------------------------//
@@ -188,8 +190,11 @@ const EditAccount = async (req, res, next) => {
         const findUser = await user_game.findOne({
             where: {
                 uuid: req.params.id
-            }
+            },
+            include: "avatar"
         })
+
+        console.log(findUser.avatar)
 
         if(findUser){
             res.render('editAccount', {
@@ -218,9 +223,30 @@ const EditAccountFunction = async (req, res) => {
             const findUser = await user_game.findOne({
                 where: {
                     uuid: req.params.id
-                }
-            })
+                },
+                include: "avatar"
+            })  
             const hashedPassoword = await bcrypt.hash(password1, 10)
+
+            if(req.file){
+                await file.create({
+                    file_url: `/avatar/${req.file.filename}`,
+                    file_name: req.file.filename,
+                    file_size: req.file.size,
+                    original_filename: req.file.originalname,
+                    user_game_uuid: findUser.uuid
+                })
+    
+                if(findUser.avatar){
+                    await file.destroy({
+                        where: {
+                            uuid: findUser.avatar.uuid
+                        }
+                    })
+                    fs.rmSync(__dirname + '/../public' + findUser.avatar.file_url)
+                }
+            }
+
             const updateUser = await user_game.update({
                 username,
                 email,
@@ -231,7 +257,7 @@ const EditAccountFunction = async (req, res) => {
             }})
             
             if(updateUser){
-                req.flash('success', 'User Registered Successfully')
+                req.flash('success', 'Account Updated Successfully')
                 res.redirect('/')
             }
         }      
@@ -475,9 +501,19 @@ DashboardDeleteFunction = async (req, res, next) => {
         const findUserGame = await user_game.findOne({
             where: {
                 uuid : req.params.id
-            }
+            },
+            include: "avatar"
         })
         if (findUserGame) {
+            
+            if(findUserGame.avatar){
+                await file.destroy({
+                    where: {
+                        uuid: findUserGame.avatar.uuid
+                    }
+                })
+                fs.rmSync(__dirname + '/../public' + findUserGame.avatar.file_url)
+            }
           await user_game_history.destroy({
               where: {
                 user_game_uuid: req.params.id

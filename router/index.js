@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const uploadImage = require('../utils/uploadImage')
 const {
     isLoggedIn,
     isLoggedInAsAdmin
@@ -51,7 +52,7 @@ router.post('/login', LoginFunction)
 router.post('/logout', isLoggedIn, LogoutFunction)
 router.post('/dashboard/create', isLoggedInAsAdmin, DashboardCreateFunction)
 router.post('/editBiodata/:id', isLoggedIn, EditBiodataFunction)
-router.post('/editAccount/:id', isLoggedIn, EditAccountFunction)
+router.post('/editAccount/:id', isLoggedIn, uploadImage.single('avatar'), EditAccountFunction)
 router.post('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEditFunction)
 router.post('/dashboard/delete/:id', isLoggedInAsAdmin, DashboardDeleteFunction)
 

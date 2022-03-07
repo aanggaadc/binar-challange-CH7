@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
           as: 'user_biodata'
         })
 
+        user_game.hasOne(models.file, {
+          foreignKey: "user_game_uuid",
+          as: 'avatar'
+        })
+
         user_game.hasMany(models.room, {
           foreignKey: 'owned_by',
           as: 'room'
