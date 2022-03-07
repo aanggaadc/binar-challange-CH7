@@ -21,9 +21,8 @@
             <div class="col-6">
                 <div class="edit-dark d-flex justify-content-center align-items-center">
                     <form action="/editBiodata/<%= data.uuid %>" method="POST">
-                        <h2 class="text-center" style="font-size: 40px;">Edit Biodata</h1>
+                        <h2 class="text-center mt-4" style="font-size: 40px;">Edit Biodata</h1>
                         <h2 class="sr-only">Login Form</h2>
-                        <div class="mt-5 text-center"><img src="/assets/images/user.png" alt="user" style="width: 30%;"></div>
                         <div  class="form-group mt-5"><input class="form-control text-center" type="text" name="full_name" value="<%= data.user_biodata.full_name %>" placeholder="Full Name"></div>
                         <div class="form-group mt-5"><input class="form-control text-center" type="text" name="address" value="<%= data.user_biodata.address %>" placeholder="Address"></div>
                         <div class="form-group mt-5"><input class="form-control text-center" type="text" name="city" value="<%= data.user_biodata.city %>" placeholder="City"></div>
