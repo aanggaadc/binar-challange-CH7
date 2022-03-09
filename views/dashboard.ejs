@@ -8,8 +8,15 @@
         background-image: url("/assets/images/dashboard-background.png");
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
         background-repeat: no-repeat;
     }
+
+    .search-box{
+      background-color: rgba(0, 0, 0, 0.3);
+      height: 100px;
+    }
+
 </style>
 <body>
     <%- include('partial/navbar') %>     
@@ -32,7 +39,10 @@
                             <a href="/dashboard/history" class="nav-link align-middle px-0">
                                 <img src="assets/icon/history.png" alt="" style="width: 28px;"><span class="ms-1 d-none d-sm-inline">User History</span>
                             </a>
-                        </li>                       
+                        </li>
+                        <a href="/dashboard/create">
+                          <button class="btn btn-primary mb-2 mt-2">Add New User</button>
+                        </a>                       
                     </ul>
                     
                 </div>
@@ -40,36 +50,71 @@
             </div>
             <div class="col py-3" style="margin-top: 100px;">
                 <div class="container-fluid">
-                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>                   
-                    
+                    <h1 class="text-center" style="color: rgb(211, 211, 211);">USER DASHBOARD</h1>
+
+                    <!-- PAGINATION -->
                     <% if (dataUser.length > 0) { %>
                       <nav aria-label="Page navigation example">
                           <ul class="pagination justify-content-center">
                             <li class="page-item <%= currentPage ==1 ? 'disabled' : '' %> ">
-                              <a class="page-link" href="/?page=<%= prevPage %>">Previous</a>
+                              <a class="page-link" href="/?page=<%= prevPage %>&full_name=<%=query.full_name%>&address=<%=query.address%>&city=<%=query.city%>&date_of_birth=<%= query.date_of_birth%>">Previous</a>
                             </li>                  
                           <% for( let index = 1; index <= totalPage; index++ ) { %>
                               <li class="page-item <%= index == currentPage ? 'active' : '' %> ">
-                                  <a class="page-link" href="/?page=<%= index %> "> <%= index %> </a>
+                                  <a class="page-link" href="/?page=<%= index %> &full_name=<%=query.full_name%>&address=<%=query.address%>&city=<%=query.city%>&date_of_birth=<%= query.date_of_birth%>"> <%= index %> </a>
                               </li>
                           <% } %>
                             <li class="page-item <%= totalPage == currentPage ? 'disabled' : '' %>">
-                              <a class="page-link " href="/?page=<%= nextPage %>">Next</a>
+                              <a class="page-link " href="/?page=<%= nextPage %>&full_name=<%=query.full_name%>&address=<%=query.address%>&city=<%=query.city%>&date_of_birth=<%= query.date_of_birth%>">
+                                Next
+                              </a>
                             </li>
                           </ul>
                         </nav>
                 <% } %> 
+                <!-- END OF PAGINATION -->
 
+
+                  <!-- MESSAGE ALERT -->
                   <% if (success) { %>
                     <%- include('partial/successMessage',{message: success[0]})  %>  
                 <% } else if (error) { %>
                     <%- include('partial/errorMessage',{message: error[0]}) %>
                   <% } %>
+                  <!-- END OF MESSAGE ALERT -->
+
+
+                  <!-- SEARCH BAR -->
+                  <div class="search-box p-3">                   
+                    <form action="/dashboard" method="get">
+                        <input type="text" class="d-none" name="page" value="1">
+                      <div class="row">
+                        <div class="col-3">
+                          <label for="name" class="form-label text-light">Full Name</label>
+                          <input type="text" class="form-control" value="<%= query.full_name %>" name="full_name">
+                        </div>
+                        <div class="col-3">
+                          <label for="address" class="form-label text-light">Address</label>
+                          <input type="text" class="form-control" value="<%= query.address %>" name="address">
+                        </div>
+                        <div class="col-2">
+                          <label for="city" class="form-label text-light">City</label>
+                          <input type="text" class="form-control" value="<%= query.city %>" name="city">
+                        </div>
+                        <div class="col-2">
+                          <label for="birth" class="form-label text-light">Date of Birth</label>
+                          <input type="date" class="form-control" value="<%= query.date_of_birth %>" name="date_of_birth">
+                        </div>
+                        <div class="col-2 d-flex align-items-end d-grip gap-2">
+                            <button type="submit" class="btn btn-secondary w-50">Search</button>
+                            <button type="submit" onclick="clearInput()" class="btn btn-dark w-50">Clear</button>                                                                
+                        </div>
+                      </div>                                  
+                    </form>
+                  </div>                  
+                  <!-- END OF SEARCH BAR -->
                     
-                    <a href="/dashboard/create">
-                        <button class="btn btn-primary mb-2 mt-2">Add New User</button>
-                      </a>
-                    <table class="table table-dark table-hover table-bordered">
+                    <table class="table table-dark table-hover table-bordered mt-3">
                       <thead>
                         <tr>
                           <th>ID</th>
@@ -130,5 +175,6 @@
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/alert.js"></script>
+    <script src="/assets/js/search.js"></script>
 </body>
 </html>

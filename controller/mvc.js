@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const {Op} = require('sequelize')
 const bcrypt = require ('bcrypt')
 const fs = require('fs')
 const {
@@ -212,8 +213,6 @@ const EditAccount = async (req, res, next) => {
             include: "avatar"
         })
 
-        console.log(findUser.avatar)
-
         if(findUser){
             res.render('editAccount', {
                 data: findUser,
@@ -304,61 +303,70 @@ const LogoutFunction = (req, res ) => {
 
 // --------------------------------DASHBOARD------------------------------------//
 
-
 const Dashboard = async (req, res, next) => {
     try {
-    const{success, error} = req.flash()
-    const page = Number(req.query.page) || 1
-    const itemPerPage = 10  
-    const token = req.cookies.jwt
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-        res.locals.user = decodedToken
-    })
+        const{success, error} = req.flash()
+        const page = Number(req.query.page) || 1
+        const itemPerPage = 10  
+        const token = req.cookies.jwt
+        const {full_name, address, city, date_of_birth} = req.query
+        const where = {}
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            res.locals.user = decodedToken
+        })
 
-    const userGameList = await user_game.findAndCountAll({
-        include: ['user_biodata', 'user_history'],
-        limit: itemPerPage,
-        offset: (page-1) * itemPerPage
-    })
+        if(full_name){
+            where['$user_biodata.full_name$'] = {[Op.iLike] : `%${full_name}%`}
+        }
+        if(address){
+            where['$user_biodata.address$'] = {[Op.iLike] : `%${address}%`}
+        }
+        if(city){
+            where['$user_biodata.city$'] = {[Op.iLike] : city}
+        }
+        if(date_of_birth){
+            where['$user_biodata.date_of_birth$'] = date_of_birth        
+        }
 
-    if(token){
+        const userGameList = await user_game.findAndCountAll({
+            include: [
+                {
+                model: user_game_biodata,
+                as: "user_biodata"
+                },
+                {
+                model: user_game_history,
+                as: "user_history"
+                }
+                ],
+            limit: itemPerPage,
+            where: where,
+            offset: (page-1) * itemPerPage
+        })
+
         const findUser = await user_game.findOne({
             where: {
-                uuid: res.locals.user.user_id
-                
-            },
-            include: "avatar"
-        })
+                uuid: res.locals.user.user_id                        
+                },
+                include: "avatar"
+            })
 
         res.render('dashboard',{
             pageTitle: "GAME DASHBOARD",
             token,
             data: findUser,
             dataUser : userGameList.rows,
+            query: req.query,
             currentPage: page,
             totalPage: Math.ceil(userGameList.count / itemPerPage),
             nextPage: page + 1,
             prevPage: (page-1) == 0 ? 1 : (page-1), 
             success: success,
             error: error
-        })
-    }else {
-        res.render('dashboard',{
-            pageTitle: "GAME DASHBOARD",
-            token,
-            dataUser : userGameList.rows,
-            currentPage: page,
-            totalPage: Math.ceil(userGameList.count / itemPerPage),
-            nextPage: page + 1,
-            prevPage: (page-1) == 0 ? 1 : (page-1), 
-            success: success,
-            error: error
-        })
-    }    
+        })   
     } catch (error) {
         console.log(error)
-        next()
-    }  
+     }  
 }
 
 const DashboardBiodata = async (req, res, next) => {
@@ -372,32 +380,25 @@ const DashboardBiodata = async (req, res, next) => {
             include: 'user_game'
         })
         
-        if(token){
-            const findUser = await user_game.findOne({
-                where: {
-                    uuid: res.locals.user.user_id
-                    
-                },
-                include: "avatar"
-            })
-    
-            res.render('dashboard-biodata',{
-                pageTitle: "USERS BIODATA",
-                token,
-                data: findUser,
-                dataUser : userBiodata
-            }) 
-        }else{
-            res.render('dashboard-biodata',{
-                pageTitle: "USERS BIODATA",
-                token,
-                dataUser : userBiodata
-            })
-        }        
-        } catch (error) {
-            console.log(error)
-            next()
-        } 
+        const findUser = await user_game.findOne({
+            where: {
+                uuid: res.locals.user.user_id
+                
+            },
+            include: "avatar"
+        })
+
+        res.render('dashboard-biodata',{
+            pageTitle: "USERS BIODATA",
+            token,
+            data: findUser,
+            dataUser : userBiodata
+        }) 
+               
+    } catch (error) {
+         console.log(error)
+        next()
+    } 
 }
 
 const DashboardHistory = async (req, res, next) => {
@@ -411,34 +412,25 @@ const DashboardHistory = async (req, res, next) => {
             include: 'user_game'
         })
 
-        if(token){
-            const findUser = await user_game.findOne({
-                where: {
-                    uuid: res.locals.user.user_id
-                    
-                },
-                include: "avatar"
-            })
-    
-            res.render('dashboard-history',{
-                pageTitle: "USERS HISTORY",
-                token,
-                data: findUser,
-                dataUser : userHistory
-            })
+        const findUser = await user_game.findOne({
+            where: {
+                uuid: res.locals.user.user_id
+                
+            },
+            include: "avatar"
+        })
+
+        res.render('dashboard-history',{
+            pageTitle: "USERS HISTORY",
+            token,
+            data: findUser,
+            dataUser : userHistory
+        })       
         
-        }else{
-            res.render('dashboard-history',{
-                pageTitle: "USERS HISTORY",
-                token,
-                dataUser : userHistory
-            })
-        }
-        
-        } catch (error) {
-            console.log(error)
-            next()
-        } 
+    } catch (error) {
+         console.log(error)
+        next()
+    } 
 }
 
 DashboardCreate = async (req, res, next) => {
