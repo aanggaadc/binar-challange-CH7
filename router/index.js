@@ -2,7 +2,8 @@ const router = require('express').Router()
 const uploadImage = require('../utils/uploadImage')
 const {
     isLoggedIn,
-    isLoggedInAsAdmin
+    isLoggedInAsAdmin,
+    checkNotAuthenticated
 } = require('../middleware/authentication')
 const verifyToken = require('../middleware/verifyToken')
 const{
@@ -37,8 +38,8 @@ const {
 
 // ----------------------------------- MVC ROUTE-------------------------------------//
 router.get('/', Index)
-router.get('/signup', SignUp)
-router.get('/login', Login)
+router.get('/signup', checkNotAuthenticated, SignUp)
+router.get('/login', checkNotAuthenticated, Login)
 router.get('/game', isLoggedIn, Game)
 router.get('/editAccount/:id',isLoggedIn, EditAccount)
 router.get('/editBiodata/:id', isLoggedIn, EditBiodata)
@@ -47,8 +48,8 @@ router.get('/dashboard/create', isLoggedInAsAdmin, DashboardCreate)
 router.get('/dashboard/biodata', isLoggedInAsAdmin, DashboardBiodata)
 router.get('/dashboard/history', isLoggedInAsAdmin, DashboardHistory)
 router.get('/dashboard/edit/:id', isLoggedInAsAdmin, DashboardEdit)
-router.post('/signup', SignupFunction)
-router.post('/login', LoginFunction)
+router.post('/signup',checkNotAuthenticated, SignupFunction)
+router.post('/login',checkNotAuthenticated, LoginFunction)
 router.post('/logout', isLoggedIn, LogoutFunction)
 router.post('/dashboard/create', isLoggedInAsAdmin, DashboardCreateFunction)
 router.post('/editBiodata/:id', isLoggedIn, EditBiodataFunction)

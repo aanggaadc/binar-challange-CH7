@@ -49,7 +49,19 @@ const isLoggedInAsAdmin = (req, res, next) => {
     }
   }
 
+  const checkNotAuthenticated = ( req, res , next ) =>{
+    const token = req.cookies.jwt;
+
+    if(token){
+      res.redirect('/')
+    }else{
+      next()
+    }
+
+  }
+
 module.exports = {
     isLoggedIn, 
-    isLoggedInAsAdmin
+    isLoggedInAsAdmin,
+    checkNotAuthenticated
 }

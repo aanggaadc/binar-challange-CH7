@@ -330,14 +330,8 @@ const Dashboard = async (req, res, next) => {
 
         const userGameList = await user_game.findAndCountAll({
             include: [
-                {
-                model: user_game_biodata,
-                as: "user_biodata"
-                },
-                {
-                model: user_game_history,
-                as: "user_history"
-                }
+                    {model: user_game_biodata, as: "user_biodata"},
+                    {model: user_game_history,as: "user_history"}
                 ],
             limit: itemPerPage,
             where: where,
